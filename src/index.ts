@@ -1,7 +1,8 @@
+#!/usr/bin/env node
 import { intro, outro, spinner, confirm, isCancel } from "@clack/prompts";
-import { checkIsGitRepo, getStagedDiff, exectCommit } from "./core/git";
-import { handleError } from "./utils/error-handler";
-import { generateCommitMessage } from "./core/ai";
+import { checkIsGitRepo, getStagedDiff, exectCommit } from "./core/git.js";
+import { handleError } from "./utils/error-handler.js";
+import { generateCommitMessage } from "./core/ai.js";
 import pc from "picocolors";
 
 async function main() {

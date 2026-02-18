@@ -1,17 +1,16 @@
 {
   "name": "chrono-eis-versiegelung",
   "version": "1.0.0",
-  "description": "AI-powered git commit message generator",
-  "type": "module",
+  "description": "",
+  "main": "dist/index.js",
   "bin": {
-    "lulo-commit": "./dist/index.js"
+    "chrono": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",
     "start": "node ./dist/index.js",
     "dev": "tsx src/index.ts",
-    "prepare": "npm run build",
-    "lint": "tsc --noEmit"
+    "prepare": "npm run build"
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
