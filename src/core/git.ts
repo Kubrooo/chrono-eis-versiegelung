@@ -15,3 +15,11 @@ export const getStagedDiff = async () => {
   }
   return stdout;
 };
+
+export const exectCommit = async (message: string) => {
+  try{
+    await execa('git', ['commit', '-m', message]);
+  } catch (error) {
+    throw new Error('Gagal melakukan commit. Cek kembali status git kamu.')
+  }
+};
