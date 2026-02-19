@@ -13,7 +13,7 @@ async function main() {
 
     const s = spinner();
     
-    s.start('Membaca perubahan kodemu...');
+    s.start('reading your change...');
     const diff = await getStagedDiff();
     s.stop('Berhasil membaca diff!');
 
