@@ -15,31 +15,31 @@ async function main() {
     
     s.start('reading your change...');
     const diff = await getStagedDiff();
-    s.stop('Berhasil membaca diff!');
+    s.stop('succesfull reading the change!');
 
-    s.start('AI sedang memikirkan pesan commit yang pas...');
+    s.start('AI still thinking...');
     const aiMessage = await generateCommitMessage(diff);
-    s.stop('AI sudah punya ide!');
+    s.stop('AI already have the idea!');
 
-    console.log(`\n${pc.dim('Saran commit:')} "${pc.cyan(aiMessage)}"`);
+    console.log(`\n${pc.dim(' commit suggestion:')} "${pc.cyan(aiMessage)}"`);
 
     const isConfirm = await confirm({
-      message: 'Apakah kamu ingin menggunakan pesan commit ini?',
+      message: 'do you want to use this message?',
       initialValue: true,
     });
 
     if (isCancel(isConfirm) || !isConfirm) {
-      outro(pc.yellow('Commit dibatalkan oleh user.'));
+      outro(pc.yellow('Commit has been canceled by user.'));
       return;
     }
 
     const sCommit = spinner();
-    sCommit.start('Sedang melakukan commit otomatis...');
+    sCommit.start('doing automatic comit...');
     
     await exectCommit(aiMessage); 
     
-    sCommit.stop(pc.green('✔ Berhasil commit!'));
-    outro(pc.bgGreen(pc.black(" SELESAI ")));
+    sCommit.stop(pc.green('✔ commit success!'));
+    outro(pc.bgGreen(pc.black(" FINISH ")));
 
   } catch (error) {
     handleError(error);
