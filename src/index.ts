@@ -10,59 +10,64 @@ async function main() {
 
   try {
     await checkIsGitRepo();
-
-    const s = spinner();
-    
-    s.start('Reading your changes...');
     const diff = await getStagedDiff();
-    s.stop('Diff retrieved successfully!');
 
-    s.start('AI is thinking of a commit message...');
-    const aiMessage = await generateCommitMessage(diff);
-    s.stop('AI suggestion ready!');
+    let finalMessage = "";
+    let isDone = false;
 
-    console.log(`\n${pc.dim('Suggested message:')} "${pc.cyan(aiMessage)}"`);
+    while (!isDone) {
+      const s = spinner();
+      s.start("AI is thinking of a commit message...");
+      const aiMessage = await generateCommitMessage(diff);
+      s.stop("AI suggestion ready!");
 
-    const action = await select({
-      message: 'What would you like to do?',
-      options: [
-        { value: 'yes', label: 'Use as is', hint: 'Commit immediately' },
-        { value: 'edit', label: 'Edit message', hint: 'Modify suggestion manually' },
-        { value: 'no', label: 'Cancel', hint: 'Abort commit' },
-      ],
-    });
+      console.log(`\n${pc.dim("Suggested message:")} "${pc.cyan(aiMessage)}"`);
 
-    if (isCancel(action) || action === 'no') {
-      outro(pc.yellow('Commit aborted.'));
-      return;
-    }
-
-    let finalMessage = aiMessage;
-
-    if (action === 'edit') {
-      const edited = await text({
-        message: 'Edit your commit message:',
-        placeholder: aiMessage,
-        initialValue: aiMessage,
-        validate(value) {
-          if (value.length === 0) return `Message cannot be empty!`;
-        },
+      const action = await select({
+        message: "What would you like to do?",
+        options: [
+          { value: "yes", label: "Use as is", hint: "Commit immediately" },
+          { value: "edit", label: "Edit message", hint: "Modify manually" },
+          {
+            value: "retry",
+            label: "Regenerate",
+            hint: "Ask AI for another idea",
+          },
+          { value: "no", label: "Cancel", hint: "Abort" },
+        ],
       });
 
-      if (isCancel(edited)) {
-        outro(pc.yellow('Editing aborted.'));
+      if (isCancel(action) || action === "no") {
+        outro(pc.yellow("Commit aborted."));
         return;
       }
-      finalMessage = edited as string;
+
+      if (action === "retry") {
+        console.log(pc.italic(pc.dim("  Retrying...")));
+        continue; 
+      }
+
+      if (action === "edit") {
+        const edited = await text({
+          message: "Edit your commit message:",
+          initialValue: aiMessage,
+        });
+
+        if (isCancel(edited)) return;
+        finalMessage = edited as string;
+      } else {
+        finalMessage = aiMessage;
+      }
+
+      isDone = true;
     }
 
     const sCommit = spinner();
-    sCommit.start('Executing commit...');
-    await exectCommit(finalMessage); 
-    sCommit.stop(pc.green('✔ Commit successful!'));
-    
-    outro(pc.bgGreen(pc.black(" DONE ")));
+    sCommit.start("Executing commit...");
+    await exectCommit(finalMessage);
+    sCommit.stop(pc.green("✔ Commit successful!"));
 
+    outro(pc.bgGreen(pc.black(" DONE ")));
   } catch (error) {
     handleError(error);
   }
