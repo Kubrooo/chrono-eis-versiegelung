@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { intro, outro, spinner, confirm, isCancel } from "@clack/prompts";
+import { intro, outro, spinner, select, text, isCancel } from "@clack/prompts";
 import { checkIsGitRepo, getStagedDiff, exectCommit } from "./core/git.js";
 import { handleError } from "./utils/error-handler.js";
 import { generateCommitMessage } from "./core/ai.js";
@@ -13,33 +13,55 @@ async function main() {
 
     const s = spinner();
     
-    s.start('reading your change...');
+    s.start('Reading your changes...');
     const diff = await getStagedDiff();
-    s.stop('succesfull reading the change!');
+    s.stop('Diff retrieved successfully!');
 
-    s.start('AI still thinking...');
+    s.start('AI is thinking of a commit message...');
     const aiMessage = await generateCommitMessage(diff);
-    s.stop('AI already have the idea!');
+    s.stop('AI suggestion ready!');
 
-    console.log(`\n${pc.dim(' commit suggestion:')} "${pc.cyan(aiMessage)}"`);
+    console.log(`\n${pc.dim('Suggested message:')} "${pc.cyan(aiMessage)}"`);
 
-    const isConfirm = await confirm({
-      message: 'do you want to use this message?',
-      initialValue: true,
+    const action = await select({
+      message: 'What would you like to do?',
+      options: [
+        { value: 'yes', label: 'Use as is', hint: 'Commit immediately' },
+        { value: 'edit', label: 'Edit message', hint: 'Modify suggestion manually' },
+        { value: 'no', label: 'Cancel', hint: 'Abort commit' },
+      ],
     });
 
-    if (isCancel(isConfirm) || !isConfirm) {
-      outro(pc.yellow('Commit has been canceled by user.'));
+    if (isCancel(action) || action === 'no') {
+      outro(pc.yellow('Commit aborted.'));
       return;
     }
 
+    let finalMessage = aiMessage;
+
+    if (action === 'edit') {
+      const edited = await text({
+        message: 'Edit your commit message:',
+        placeholder: aiMessage,
+        initialValue: aiMessage,
+        validate(value) {
+          if (value.length === 0) return `Message cannot be empty!`;
+        },
+      });
+
+      if (isCancel(edited)) {
+        outro(pc.yellow('Editing aborted.'));
+        return;
+      }
+      finalMessage = edited as string;
+    }
+
     const sCommit = spinner();
-    sCommit.start('doing automatic comit...');
+    sCommit.start('Executing commit...');
+    await exectCommit(finalMessage); 
+    sCommit.stop(pc.green('✔ Commit successful!'));
     
-    await exectCommit(aiMessage); 
-    
-    sCommit.stop(pc.green('✔ commit success!'));
-    outro(pc.bgGreen(pc.black(" FINISH ")));
+    outro(pc.bgGreen(pc.black(" DONE ")));
 
   } catch (error) {
     handleError(error);
