@@ -15,6 +15,7 @@
   "dependencies": {
     "@clack/prompts": "^0.7.0",
     "@google/generative-ai": "^0.21.0",
+    "conf": "^15.1.0",
     "dotenv": "^16.6.1",
     "execa": "^9.0.0",
     "zod": "^3.23.0"
