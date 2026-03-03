@@ -3,10 +3,29 @@ import { intro, outro, spinner, select, text, isCancel } from "@clack/prompts";
 import { checkIsGitRepo, getStagedDiff, exectCommit } from "./core/git.js";
 import { handleError } from "./utils/error-handler.js";
 import { generateCommitMessage } from "./core/ai.js";
+import { getPreferences, setPreference } from "./core/config.js";
 import pc from "picocolors";
 
 async function main() {
   intro(pc.bgCyan(pc.black(" chrono-eis-versiegelung ")));
+
+  const args = process.argv.slice(2);
+  
+  if (args.includes('--setup')) {
+    intro(pc.bgMagenta(pc.black(" CHRONO SETUP ")));
+    
+    const jira = await text({
+      message: 'Enter your Jira Project Key (leave empty to skip):',
+      placeholder: 'e.g., PROJ',
+    });
+
+    if (isCancel(jira)) return;
+
+    setPreference('jiraPrefix', jira);
+    
+    outro(pc.green('Preferences saved successfully!'));
+    return;
+  }
 
   try {
     await checkIsGitRepo();

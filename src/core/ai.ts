@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI  } from "@google/generative-ai";
+import { getPreferences } from "./config";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -7,10 +8,11 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
 export const generateCommitMessage = async (diff: string) => {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash"})
+    const { jiraPrefix } = await getPreferences();
 
-    const prompt = `Kamu adalah pakar Git. Tugasmu adalah menulis pesan commit berdasarkan perubahan kode (git diff) berikut.
-    Gunakan format Conventional Commits (feat:, fix:, chore:, docs:, style:, refactor:, perf:, test:).
-    Tuliskan HANYA pesan commit-nya saja dalam satu baris, tanpa penjelasan tambahan.
+    const prompt = `Analyze this git diff and write a professional commit message.
+    ${jiraPrefix ? `IMPORTANT: Start the message with [${jiraPrefix}-X] where X is a placeholder for task number.` : ''}
+    Use conventional commits style.
 
     Diff:
     ${diff}
