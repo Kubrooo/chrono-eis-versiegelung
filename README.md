@@ -1,2 +1,1 @@
-test
-day 4 week 3
+proper readme soon ig xD

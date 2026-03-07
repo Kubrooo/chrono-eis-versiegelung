@@ -10,5 +10,9 @@ export const getPreferences = () => {
 };
 
 export const setPreference = (key: string, value: any) => {
-    config.set(key, value);
+    if (value === '' || value === null || value === undefined) {
+        config.delete(key);
+    } else {
+        config.set(key, value);
+    }
 };

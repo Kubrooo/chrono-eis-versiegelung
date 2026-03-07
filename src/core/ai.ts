@@ -10,9 +10,11 @@ export const generateCommitMessage = async (diff: string) => {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash"})
     const { jiraPrefix } = await getPreferences();
 
-    const prompt = `Analyze this git diff and write a professional commit message.
+    const prompt = `Analyze this git diff and write a concise commit message.
     ${jiraPrefix ? `IMPORTANT: Start the message with [${jiraPrefix}-X] where X is a placeholder for task number.` : ''}
-    Use conventional commits style.
+    Use conventional commits format: type(scope): brief description
+    Keep it under 72 characters if possible.
+    Return ONLY the commit message, no markdown formatting or code blocks.
 
     Diff:
     ${diff}
@@ -20,5 +22,10 @@ export const generateCommitMessage = async (diff: string) => {
 
   const result = await model.generateContent(prompt);
   const response = await result.response;
-  return response.text().trim();
+  let message = response.text().trim();
+  
+  // Remove markdown code blocks if present
+  message = message.replace(/^```[\s\S]*?\n/, '').replace(/\n```$/, '');
+  
+  return message;
 }
