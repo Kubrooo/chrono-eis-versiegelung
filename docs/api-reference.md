@@ -379,7 +379,7 @@ All errors are caught and passed to `handleError` for consistent error display.
 
 **Example:**
 ```env
-GEMINI_API_KEY=AIzaSyAbc123def456ghi789jkl012mno345pqr
+GEMINI_API_KEY=AbcDeFGhiJklmnOPQrsTuvwxYZ
 ```
 
 **Validation:**
