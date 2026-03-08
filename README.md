@@ -224,8 +224,15 @@ chrono-cli/
 │   ├── core/           # Core functionality
 │   ├── utils/          # Utility functions
 │   └── index.ts        # Main entry point
+├── tests/              # Unit tests
+│   ├── ai.test.ts      # AI module tests
+│   ├── config.test.ts  # Config module tests
+│   ├── git.test.ts     # Git module tests
+│   └── README.md       # Test documentation
 ├── dist/               # Compiled output
 ├── docs/               # Documentation
+├── coverage/           # Test coverage reports (generated)
+├── vitest.config.ts    # Test configuration
 └── package.json        # Project configuration
 ```
 

@@ -116,13 +116,20 @@ chrono-cli/
 │   ├── utils/
 │   │   └── error-handler.ts # Error handling utilities
 │   └── index.ts            # Main entry point
+├── tests/                  # Unit tests
+│   ├── ai.test.ts          # AI module tests
+│   ├── config.test.ts      # Config module tests
+│   ├── git.test.ts         # Git module tests
+│   └── README.md           # Test documentation
 ├── dist/                   # Compiled JavaScript (generated)
 ├── docs/                   # Documentation
+├── coverage/               # Test coverage reports (generated)
 ├── .env                    # Environment variables (not in git)
 ├── .env.example            # Environment template
 ├── .gitignore              # Git ignore rules
 ├── package.json            # Project metadata
 ├── tsconfig.json           # TypeScript configuration
+├── vitest.config.ts        # Test configuration
 ├── README.md               # Project overview
 ├── LICENSE                 # License information
 └── CHANGELOG.md            # Version history
