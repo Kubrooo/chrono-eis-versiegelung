@@ -39,7 +39,11 @@
     "build": "tsc",
     "start": "node ./dist/index.js",
     "dev": "tsx src/index.ts",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
@@ -51,7 +55,9 @@
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
+    "@vitest/ui": "^4.0.18",
     "tsx": "^4.21.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vitest": "^4.0.18"
   }
 }

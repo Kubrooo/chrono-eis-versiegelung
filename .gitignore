@@ -5,6 +5,10 @@ node_modules/
 dist/
 build/
 
+# Test coverage
+coverage/
+*.lcov
+
 # Environment variables (Sangat Penting!)
 .env
 .env.local
