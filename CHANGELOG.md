@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2024-12-19
+
 ### Added
 - Multi-line commit message support with subject, body, and footer sections
 - AI intelligently chooses between single-line and multi-line formats based on change significance

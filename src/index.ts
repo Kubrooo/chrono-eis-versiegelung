@@ -60,7 +60,7 @@ async function main() {
     return;
   }
 
-  intro(pc.bgCyan(pc.black(" chrono-eis-versiegelung ")));
+  intro(pc.bgCyan(pc.black(" chrono ")));
   try {
     await checkIsGitRepo();
     const diff = await getStagedDiff();
