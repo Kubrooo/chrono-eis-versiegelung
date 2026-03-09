@@ -7,6 +7,7 @@ A personal project by a college student: An AI-powered command-line tool that ge
 ## Features
 
 - AI-generated commit messages using Google Gemini
+- Multi-line commit messages with body and footer
 - Conventional Commits format compliance
 - Optional Jira ticket prefix integration
 - Interactive editing and regeneration
@@ -101,7 +102,11 @@ chrono --version    # Show version number
 $ git add src/auth.js
 $ chrono
 
-Suggested message: "feat(auth): add JWT token validation"
+Suggested message:
+feat(auth): add JWT token validation
+
+Implemented JWT token validation to secure API endpoints.
+Tokens are now verified for signature and expiration.
 
 What would you like to do?
   > Use as is (Commit immediately)
@@ -131,10 +136,23 @@ To remove the prefix, run `chrono --setup` and leave the field empty.
 
 ## Commit Message Format
 
-Chrono generates messages following the Conventional Commits specification:
+Chrono generates messages following the Conventional Commits specification.
+
+### Single-line Format (for small changes)
 
 ```
 type(scope): description
+```
+
+### Multi-line Format (for larger changes)
+
+```
+type(scope): brief description
+
+Detailed explanation of what changed and why.
+Can span multiple lines.
+
+Footer with issue references or breaking changes.
 ```
 
 ### Common Types
@@ -149,12 +167,31 @@ type(scope): description
 
 ### Examples
 
+**Single-line (small changes):**
 ```
 feat(auth): add JWT token validation
 fix(api): resolve null pointer exception in user service
 docs(readme): update installation instructions
-refactor(utils): simplify date formatting logic
-test(auth): add unit tests for login flow
+```
+
+**Multi-line (larger changes):**
+```
+feat(auth): add JWT token validation
+
+Implemented comprehensive JWT token validation for API security.
+Added middleware to verify token signatures and check expiration.
+
+Closes #42
+```
+
+```
+refactor(database): migrate to PostgreSQL
+
+Migrated from SQLite to PostgreSQL for better performance
+and scalability. Updated all queries and connection logic.
+
+BREAKING CHANGE: Database configuration format has changed.
+See migration guide in docs/migration.md
 ```
 
 ## Why Clone Instead of npm install?

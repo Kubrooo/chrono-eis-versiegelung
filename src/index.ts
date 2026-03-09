@@ -74,7 +74,8 @@ async function main() {
       const aiMessage = await generateCommitMessage(diff);
       s.stop("AI suggestion ready!");
 
-      console.log(`\n${pc.dim("Suggested message:")} "${pc.cyan(aiMessage)}"`);
+      console.log(`\n${pc.dim("Suggested message:")}`);
+      console.log(pc.cyan(aiMessage));
 
       const action = await select({
         message: "What would you like to do?",
@@ -101,6 +102,7 @@ async function main() {
       }
 
       if (action === "edit") {
+        console.log(pc.dim("\nTip: For multi-line messages, use \\n for line breaks"));
         const edited = await text({
           message: "Edit your commit message:",
           initialValue: aiMessage,
