@@ -20,6 +20,11 @@ export const getStagedDiff = async () => {
   return stdout;
 };
 
+export const getStagedFiles = async () => {
+  const { stdout } = await execa('git', ['diff', '--cached', '--name-status']);
+  return stdout;
+};
+
 export const exectCommit = async (message: string) => {
   try{
     await execa('git', ['commit', '-m', message]);

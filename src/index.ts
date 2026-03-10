@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { intro, outro, spinner, select, text, isCancel } from "@clack/prompts";
-import { checkIsGitRepo, getStagedDiff, exectCommit } from "./core/git.js";
+import { checkIsGitRepo, getStagedDiff, getStagedFiles, exectCommit } from "./core/git.js";
 import { handleError } from "./utils/error-handler.js";
 import { generateCommitMessage } from "./core/ai.js";
 import { getPreferences, setPreference } from "./core/config.js";
@@ -63,6 +63,18 @@ async function main() {
   intro(pc.bgCyan(pc.black(" chrono ")));
   try {
     await checkIsGitRepo();
+    
+    // Show diff preview
+    const files = await getStagedFiles();
+    console.log(pc.dim('\nStaged changes:'));
+    files.split('\n').forEach(line => {
+      const [status, file] = line.split('\t');
+      const statusColor = status === 'A' ? pc.green : status === 'M' ? pc.yellow : pc.red;
+      const statusText = status === 'A' ? 'Added' : status === 'M' ? 'Modified' : 'Deleted';
+      console.log(`  ${statusColor(statusText.padEnd(8))} ${pc.dim(file)}`);
+    });
+    console.log('');
+    
     const diff = await getStagedDiff();
 
     let finalMessage = "";
