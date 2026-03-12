@@ -1,8 +1,18 @@
 import { GoogleGenerativeAI  } from "@google/generative-ai";
 import { getPreferences } from "./config";
 import dotenv from "dotenv";
+import { join } from 'path';
+import { existsSync } from 'fs';
 
-dotenv.config();
+// Try to load .env from current working directory first
+const cwd = process.cwd();
+const cwdEnvPath = join(cwd, '.env');
+if (existsSync(cwdEnvPath)) {
+  dotenv.config({ path: cwdEnvPath });
+} else {
+  // Fallback to default dotenv behavior (checks package directory and system env)
+  dotenv.config();
+}
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
